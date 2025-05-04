@@ -41,7 +41,7 @@ where:
 
 The partial derivatives of the MSE with respect to the weights and bias are calculated as follows:
 
-$$\frac{\partial MSE}{\partial w_j} = \frac{2}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)(-x_{ij})$$
+$$\frac{\partial MSE}{\partial w_j} = \frac{2}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)(-x_{ij})$$ 
 $$\frac{\partial MSE}{\partial b} = \frac{2}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)(-1)$$
 
 These update rules are applied iteratively until the model converges to a minimum or a maximum number of iterations is reached.
