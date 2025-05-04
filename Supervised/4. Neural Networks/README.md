@@ -99,3 +99,4 @@ nn.fit(X_train, y_train)
 # Make predictions
 predictions = nn.predict(X_train)
 print("Predictions:", predictions)
+```
