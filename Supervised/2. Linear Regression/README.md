@@ -75,5 +75,4 @@ print("Predictions for X_test:", predictions)
 # Evaluate the model
 r_squared = neuron.score(X, y)
 print(f"R^2 Score: {r_squared:.2f}")
-6.  R^2 ScoreThe coefficient of determination (R2) measures the proportion of the variance in the dependent variable that is predictable from the independent variable(s). It ranges from 0 to 1, where 1 indicates a perfect fit.The R2 score is calculated as:R2=1−SStot​SSres​​Where:SSres​ is the sum of squared residuals:  SSres​=∑(yi​−y^​i​)2SStot​ is the total sum of squares: SStot​=∑(yi​−yˉ​)2yˉ​ is the mean of the observed values.
 ```
