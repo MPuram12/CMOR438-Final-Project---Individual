@@ -172,7 +172,6 @@ class NeuralNetwork:
             ndarray: Derivative of tanh.
         """
         return 1 - np.tanh(x)**2
-
     def _forward_pass(self, X):
         """
         Performs a forward pass through the network.
@@ -183,14 +182,16 @@ class NeuralNetwork:
         Returns:
             list: A list of activations at each layer.
         """
-        activations = [X]  # Start with the input
+        activations = [X]
         for i in range(len(self.weights)):
             z = np.dot(activations[-1], self.weights[i]) + self.biases[i]
-            activation_function = self.activation_functions[self.activation_function]
-            a = activation_function(z)
+            if i < len(self.weights) - 1:
+                a = self.activation_functions[self.activation_function](z)  # Hidden layers
+            else:
+                a = z  # Output layer (linear activation)
             activations.append(a)
         return activations
-
+    
     def _backward_pass(self, X, y, activations):
         """
         Performs backpropagation to compute gradients.
@@ -207,23 +208,22 @@ class NeuralNetwork:
         gradients_b = []
         n_samples = X.shape[0]
 
-        # Output layer
-        error = activations[-1] - y  # (n_samples, n_output)
-        derivative_func = self.derivatives[self.activation_function] #get derivative function
-        dz = error * derivative_func(np.dot(activations[-2], self.weights[-1]) + self.biases[-1])  # (n_samples, n_output)
-        
-        dw = (1 / n_samples) * np.dot(activations[-2].T, dz)  # (hidden_dims[-1], n_output)
-        db = (1 / n_samples) * np.sum(dz, axis=0)  # (n_output,)
-        
+        # Output layer gradient (linear activation: derivative = 1)
+        error = activations[-1] - y  # shape: (n_samples, n_output)
+        dz = error
+        dw = (1 / n_samples) * np.dot(activations[-2].T, dz)
+        db = (1 / n_samples) * np.sum(dz, axis=0)
+
         gradients_w.insert(0, dw)
         gradients_b.insert(0, db)
 
-        # Hidden layers (from last to first)
+        # Hidden layers
         for i in range(len(self.weights) - 2, -1, -1):
-            dz = np.dot(dz, self.weights[i+1].T) * self.derivatives[self.activation_function](np.dot(activations[i], self.weights[i]) + self.biases[i])  # (n_samples, hidden_dims[i])
-            dw = (1 / n_samples) * np.dot(activations[i].T, dz)  # (hidden_dims[i-1], hidden_dims[i]) or (n_features, hidden_dims[0])
-            db = (1 / n_samples) * np.sum(dz, axis=0)  # (hidden_dims[i],)
-            
+            z = np.dot(activations[i], self.weights[i]) + self.biases[i]
+            dz = np.dot(dz, self.weights[i + 1].T) * self.derivatives[self.activation_function](z)
+            dw = (1 / n_samples) * np.dot(activations[i].T, dz)
+            db = (1 / n_samples) * np.sum(dz, axis=0)
+
             gradients_w.insert(0, dw)
             gradients_b.insert(0, db)
 

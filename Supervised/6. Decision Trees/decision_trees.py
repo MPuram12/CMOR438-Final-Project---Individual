@@ -72,7 +72,7 @@ class DecisionTreeRegressor:
         best_split = self._get_best_split(X, y)
 
         # If no good split is found, return the mean of the target values
-        if best_split['feature_index'] is None:
+        if not best_split:
             return {'value': np.mean(y)}
 
         # Recursively build the left and right subtrees
@@ -100,8 +100,9 @@ class DecisionTreeRegressor:
 
         Returns:
             dict: A dictionary containing the best split information.
-                {'feature_index': int, 'threshold': float, 'left_X': ndarray, 'left_y': ndarray,
-                 'right_X': ndarray, 'right_y': ndarray}
+                    {'feature_index': int, 'threshold': float, 'left_X': ndarray, 'left_y': ndarray,
+                    'right_X': ndarray, 'right_y': ndarray}
+            If no valid split is found, returns an empty dictionary.
         """
         n_samples, n_features = X.shape
         if n_features == 0:
@@ -115,7 +116,7 @@ class DecisionTreeRegressor:
         for feature_index in range(n_features):
             # Get the unique values of the feature
             feature_values = np.unique(X[:, feature_index])
-            #consider all values as thresholds
+            # Consider all values as thresholds
             for threshold in feature_values:
                 # Split the data based on the threshold
                 left_mask = X[:, feature_index] <= threshold
@@ -142,6 +143,10 @@ class DecisionTreeRegressor:
                             'right_X': right_X,
                             'right_y': right_y,
                         }
+
+        # If no split found, return an empty dictionary
+        if not best_split:
+            return {}
 
         return best_split
 
