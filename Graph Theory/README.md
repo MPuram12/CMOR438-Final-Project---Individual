@@ -35,7 +35,7 @@ Given an undirected graph \( G = (V, E) \):
 
 ---
 
-## 🔍 Maximum Clique Detection via MILP
+## Maximum Clique Detection via MILP
 
 A **clique** is a subset of vertices \( C \subseteq V \) such that every pair of nodes in \( C \) is connected:
 \[
